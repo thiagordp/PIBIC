@@ -1,0 +1,2 @@
+Para rodar o código no celular(HTC) do projeto, precisa instalar o programa HTC Sync Manager no computador.
+
