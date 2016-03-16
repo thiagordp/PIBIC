@@ -1,6 +1,5 @@
 package br.com.livroandroid.bluetooth;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -24,12 +23,13 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
         setContentView(R.layout.activity_main);
 
-        String[] items = new String[]{
+        String[] items = new String[] {
                 "Verificar e ativar Bluetooth",
                 "Buscar devices",
                 "Ficar visível",
                 "Sair"};
 
+        // Atribuição dos itens ao List View
         ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items));
         listView.setOnItemClickListener(this);
@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     break;
                 case 2:
                     // Garante que alguém pode te encontrar
-                    BluetoothUtil.makeVisible(this,300);
+                    BluetoothUtil.makeVisible(this, 300);
                     break;
                 default:
                     finish();

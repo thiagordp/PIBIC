@@ -30,44 +30,9 @@ import java.util.Vector;
  * @author Ricardo Lecheta
  */
 public class ListaDevicesActivity extends BluetoothCheckActivity implements AdapterView.OnItemClickListener {
-    private ProgressDialog dialog;
     protected List<BluetoothDevice> lista;
+    private ProgressDialog dialog;
     private ListView listView;
-
-    static String convertStreamToString(java.io.InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_devices);
-        listView = (ListView) findViewById(R.id.listView);
-        // Inicia a lista com os devices pareados
-        lista = new ArrayList<BluetoothDevice>(btfAdapter.getBondedDevices());
-        // Registra o receiver para receber as mensagens de dispositivos pareados
-        this.registerReceiver(mReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-        // Register for broadcasts when discovery has finished
-        this.registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
-
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                .permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();        // Garante que não existe outra busca sendo realizada
-        if (btfAdapter.isDiscovering()) {
-            btfAdapter.cancelDiscovery();
-        }
-        // Dispara a busca
-        btfAdapter.startDiscovery();
-        dialog = ProgressDialog.show(this, "Exemplo", "Buscando dispositivos bluetooth...",
-                false, true);
-    }
-
     private Vector<String> respostas = new Vector<String>();
 
     // Receiver para receber os broadcasts do bluetooth
@@ -91,28 +56,26 @@ public class ListaDevicesActivity extends BluetoothCheckActivity implements Adap
                     count++;
 
                     try {
-                        String encodedUrl = URLEncoder.encode( device.getAddress(), "UTF-8" );
+                        String encodedUrl = URLEncoder.encode(device.getAddress(), "UTF-8");
 
-                        String minha_url = "http://54.207.46.165:8081/apsearch/APService?" + "id=" + encodedUrl  + "&option=beacon";
+                        String minha_url = "http://54.207.46.165:8081/apsearch/APService?" + "id=" + encodedUrl + "&option=beacon";
 
-                        URL url = new URL( minha_url );
+                        URL url = new URL(minha_url);
                         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                         try {
-                            if( urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK ) {
-                                String response = convertStreamToString( urlConnection.getInputStream() );
+                            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                                String response = convertStreamToString(urlConnection.getInputStream());
 
                                 respostas.add(response);
                             } else {
                                 respostas.add("Deu Erro!");
                             }
-                        }
-                        finally {
+                        } finally {
                             urlConnection.disconnect();
                         }
-
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
-                    } catch (IOException e ) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -124,14 +87,14 @@ public class ListaDevicesActivity extends BluetoothCheckActivity implements Adap
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 // Terminou a busca
                 Toast.makeText(context, "Busca finalizada. " + count + "/" + respostas.size() +
-                        " devices encontrados", Toast.LENGTH_LONG ).show();
+                        " devices encontrados", Toast.LENGTH_LONG).show();
 
                 String l_toast = "";
-                for ( int i = 0; i < respostas.size(); i++ ) {
-                    l_toast +=  respostas.get(i) + ", ";
+                for (int i = 0; i < respostas.size(); i++) {
+                    l_toast += respostas.get(i) + ", ";
                 }
 
-                Toast.makeText(context, l_toast, Toast.LENGTH_LONG ).show();
+                Toast.makeText(context, l_toast, Toast.LENGTH_LONG).show();
 
                 dialog.dismiss();
                 // Atualiza o listview. Agora vai possuir todos os devices pareados,
@@ -140,6 +103,38 @@ public class ListaDevicesActivity extends BluetoothCheckActivity implements Adap
             }
         }
     };
+
+    static String convertStreamToString(java.io.InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_lista_devices);
+        listView = (ListView) findViewById(R.id.listView);
+        // Inicia a lista com os devices pareados
+        lista = new ArrayList<BluetoothDevice>(btfAdapter.getBondedDevices());
+        // Registra o receiver para receber as mensagens de dispositivos pareados
+        this.registerReceiver(mReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+        // Register for broadcasts when discovery has finished
+        this.registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();        // Garante que não existe outra busca sendo realizada
+        if (btfAdapter.isDiscovering()) {
+            btfAdapter.cancelDiscovery();
+        }
+        // Dispara a busca
+        btfAdapter.startDiscovery();
+        dialog = ProgressDialog.show(this, "Exemplo", "Buscando dispositivos bluetooth...", false, true);
+    }
 
     @Override
     protected void onDestroy() {
@@ -159,9 +154,9 @@ public class ListaDevicesActivity extends BluetoothCheckActivity implements Adap
             // Neste exemplo, esta variável boolean sempre será true, pois esta lista é
             // somente dos pareados.
             boolean pareado = device.getBondState() == BluetoothDevice.BOND_BONDED;
-            nomes.add(device.getName() + " - " + device.getAddress() +
-                    (pareado ? " *pareado" : ""));
+            nomes.add(device.getName() + " - " + device.getAddress() + (pareado ? " *pareado" : ""));
         }
+
         // Cria o adapter para popular o ListView
         int layout = android.R.layout.simple_list_item_1;
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, layout, nomes);
@@ -175,7 +170,5 @@ public class ListaDevicesActivity extends BluetoothCheckActivity implements Adap
         BluetoothDevice device = lista.get(idx);
         String msg = device.getName() + " - " + device.getAddress();
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-
-
     }
 }
