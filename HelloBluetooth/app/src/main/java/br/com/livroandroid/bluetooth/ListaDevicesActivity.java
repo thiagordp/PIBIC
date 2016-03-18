@@ -46,13 +46,14 @@ public class ListaDevicesActivity extends BluetoothCheckActivity implements Adap
             // Se um device foi encontrado
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 // Recupera o device da intent
-                BluetoothDevice device =
-                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 // Apenas insere na lista os devices que ainda não estão pareados
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                     lista.add(device);
-                    Toast.makeText(context, "Encontrou: " + device.getName() + ":" +
-                            device.getAddress(), Toast.LENGTH_SHORT).show();
+
+
+
+                    Toast.makeText(context, "Encontrou: " + device.getName() + ":" + device.getAddress(), Toast.LENGTH_SHORT).show();
                     count++;
 
                     try {

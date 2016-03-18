@@ -25,7 +25,7 @@
 
         <activity android:name=".BluetoothCheckActivity" android:label="@string/bluetooth_check" android:parentActivityName=".MainActivity" />
         <activity android:name=".ListaDevicesActivity" android:label="@string/lista_devices" android:parentActivityName=".MainActivity" />
-        <activity android:name=".BluetoothChatServerActivity" android:label="@string/chat_server" android:parentActivityName=".MainActivity" />
+     <!--  <activity android:name=".BluetoothChatServerActivity" android:label="@string/chat_server" android:parentActivityName=".MainActivity" /> -->
 
     </application>
 

@@ -1,0 +1,4 @@
+configurations.create("default")
+artifacts.add("default", file('android-beacon-library-2.7.aar'))
+dependencies {
+}

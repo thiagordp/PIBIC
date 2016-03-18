@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HelloBluetooth.iml" filepath="$PROJECT_DIR$/HelloBluetooth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-beacon-library-2.7/android-beacon-library-2.7.iml" filepath="$PROJECT_DIR$/android-beacon-library-2.7/android-beacon-library-2.7.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
