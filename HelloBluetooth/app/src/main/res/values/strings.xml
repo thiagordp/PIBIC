@@ -16,6 +16,7 @@
     <string name="chat_client">Chat Client</string>
     <string name="lista_pareados">Lista Pareados</string>
     <string name="lista_devices">Lista Devices</string>
+    <string name ="beacon_teste">Beacon Test</string>
     <string name="bluetooth_check">Bluetooth Check</string>
 
 </resources>

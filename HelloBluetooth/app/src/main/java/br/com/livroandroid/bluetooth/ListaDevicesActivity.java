@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,6 +31,7 @@ import java.util.Vector;
  * @author Ricardo Lecheta
  */
 public class ListaDevicesActivity extends BluetoothCheckActivity implements AdapterView.OnItemClickListener {
+    private final String TAG = "ListaDevicesActivity";
     protected List<BluetoothDevice> lista;
     private ProgressDialog dialog;
     private ListView listView;
@@ -51,7 +53,7 @@ public class ListaDevicesActivity extends BluetoothCheckActivity implements Adap
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                     lista.add(device);
 
-
+                    Log.d(TAG, "Teste");
 
                     Toast.makeText(context, "Encontrou: " + device.getName() + ":" + device.getAddress(), Toast.LENGTH_SHORT).show();
                     count++;

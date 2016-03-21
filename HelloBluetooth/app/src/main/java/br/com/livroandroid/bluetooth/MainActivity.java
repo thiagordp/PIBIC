@@ -27,6 +27,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                 "Verificar e ativar Bluetooth",
                 "Buscar devices",
                 "Ficar visível",
+                "altBeacon Teste",
                 "Sair"};
 
         // Atribuição dos itens ao List View
@@ -49,7 +50,14 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     // Garante que alguém pode te encontrar
                     BluetoothUtil.makeVisible(this, 300);
                     break;
+                case 3:
+                    startActivity(new Intent(this, BeaconTest.class));
+                    break;
+                case 4:
+                    finish();
+                    break;
                 default:
+
                     finish();
                     break;
             }
