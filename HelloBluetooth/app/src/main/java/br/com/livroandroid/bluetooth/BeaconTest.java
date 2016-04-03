@@ -6,7 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Switch;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -23,7 +23,8 @@ import java.util.List;
 
 public class BeaconTest extends ActionBarActivity implements BeaconConsumer {
     private final String TAG = "BeaconTest";
-    private final String REGION1 = "Region1";                               // Região
+    private final String REGION1 = "Region1";     // Região
+    private Switch aSwitch;
 
     private long count = 0;
     private BeaconManager beaconManager;
@@ -41,6 +42,8 @@ public class BeaconTest extends ActionBarActivity implements BeaconConsumer {
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);      // Exibe o ícone de voltar à activity principal
         listView = (ListView) findViewById(R.id.listView);
         devices = new ArrayList<>();
+        aSwitch = (Switch) findViewById(R.id.swAtivaLeitura);
+
         //bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         // ---- Beacon cfg ---- //
@@ -63,22 +66,25 @@ public class BeaconTest extends ActionBarActivity implements BeaconConsumer {
      * Atualização da lista de dispositivos
      */
     private void updateLista() {
+        if (aSwitch.isChecked()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    List<String> infos = new ArrayList<String>();
+                    for (Beacon beacon : devices) {
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                List<String> infos = new ArrayList<String>();
-                for (Beacon beacon : devices) {
-                    infos.add("Device:\t\t" + beacon.getBluetoothName() + "\nMAC:\t\t\t" + beacon.getBluetoothAddress() + "\nUUID:\t\t" + beacon.getId1() +
-                            "\nMajor:\t\t" + beacon.getId2() + "\nMinor:\t\t" + beacon.getId3() + "\nRssi:\t\t\t" + beacon.getRssi());
+                        infos.add("Device:\t\t" + beacon.getBluetoothName() + "\nMAC:\t\t\t" + beacon.getBluetoothAddress() + "\nUUID:\t\t" + beacon.getId1() +
+                                "\nMajor:\t\t" + beacon.getId2() + "\nMinor:\t\t" + beacon.getId3() + "\nRssi:\t\t\t" + beacon.getRssi() +
+                                "dB\nDistância:\t" + String.format("%.2f", beacon.getDistance()) + "m");
+                    }
+
+                    int layout = android.R.layout.simple_list_item_1;
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), layout, infos);
+
+                    listView.setAdapter(adapter);
                 }
-
-                int layout = android.R.layout.simple_list_item_1;
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), layout, infos);
-
-                listView.setAdapter(adapter);
-            }
-        });
+            });
+        }
     }
 
     // -------- Beacon methods -------- //
@@ -115,15 +121,10 @@ public class BeaconTest extends ActionBarActivity implements BeaconConsumer {
                         String message = beacon.getBluetoothName() + "/" + beacon.getBluetoothAddress() + "/" +
                                 beacon.getId1() + "/" + beacon.getId2() + "/" + beacon.getId3() + "/" + beacon.getRssi() + "/" +
                                 beacon.getDistance();
-
                         Log.d(TAG, message);
-
-
                         devices.add(beacon);
-
                     }
                 }
-
                 updateLista();
             }
         });
@@ -137,16 +138,5 @@ public class BeaconTest extends ActionBarActivity implements BeaconConsumer {
     }
 
 
-    // -------- Other methods -------- //
-
-
-    private void setText(final TextView text, final String value) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                text.setText(++count + "\n\n" + value);
-            }
-        });
-    }
 }
 

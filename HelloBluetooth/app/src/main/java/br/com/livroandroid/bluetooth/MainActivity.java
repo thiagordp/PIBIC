@@ -54,10 +54,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     startActivity(new Intent(this, BeaconTest.class));
                     break;
                 case 4:
-                    finish();
-                    break;
                 default:
-
                     finish();
                     break;
             }
