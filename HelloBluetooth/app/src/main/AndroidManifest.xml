@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="br.com.livroandroid.bluetooth"
-          xmlns:android="http://schemas.android.com/apk/res/android">
 
+<!--Referência:
+    http://stackoverflow.com/questions/8854359/exception-open-failed-eacces-permission-denied-on-android
+    -->
+<manifest
+
+    package="br.com.livroandroid.bluetooth"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.INTERNET"/>
