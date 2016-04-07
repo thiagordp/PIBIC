@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="br.com.livroandroid.bluetooth"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest package="br.com.livroandroid.bluetooth"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
@@ -35,8 +34,7 @@
         <activity
             android:name=".BeaconTest"
             android:label="@string/beacon_teste"
-            android:parentActivityName=".MainActivity"
-            />
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
