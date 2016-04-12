@@ -10,6 +10,7 @@ import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
@@ -20,6 +21,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.Collection;
+import java.util.List;
 
 public class RecomendacaoActivity extends ActionBarActivity implements BeaconConsumer {
 
@@ -27,6 +29,9 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
     private final String UTF_8 = "UTF-8";
     private final String REGION1 = "REGIAO_1";
     private BeaconManager beaconManager;
+    private boolean CHANGE_BEACON_QTD = true;
+    private List<Produto> produtos;
+    private boolean LOG_ENABLED = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +40,7 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Log.d(TAG, "Activity created");
+        LOG(TAG, "Activity created");
 
         // Configuração do detector de beacons.
         beaconManager = BeaconManager.getInstanceForApplication(this);
@@ -45,7 +50,7 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         beaconManager.bind(this);
 
-        Log.d(TAG, "Configuração de beacon efetuada");
+        LOG(TAG, "Configuração de beacon efetuada");
     }
 
     @Override
@@ -56,22 +61,42 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
 
     @Override
     public void onBeaconServiceConnect() {
+
+        beaconManager.setMonitorNotifier(new MonitorNotifier() {
+            @Override
+            public void didEnterRegion(Region region) {
+                CHANGE_BEACON_QTD = true;
+                LOG(TAG, "Beacon entrou na região");
+            }
+
+            @Override
+            public void didExitRegion(Region region) {
+                CHANGE_BEACON_QTD = true;
+
+                LOG(TAG, "Beacon saiu na região");
+            }
+
+            @Override
+            public void didDetermineStateForRegion(int i, Region region) {
+            }
+        });
+
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
-                if (Util.isWifiConnected(getBaseContext()) == false) {
+             /*   if (Util.isWifiConnected(getBaseContext()) == false) {
                     Toast.makeText(getBaseContext(), "Sem rede de internet!", Toast.LENGTH_LONG).show();
-                }
+                }*/
 
-                if (collection.size() > 0) {
+                if (collection.size() > 0 && CHANGE_BEACON_QTD == true) {
 
-                    Log.d(TAG, "Iniciando detecção de beacons: " + collection.size() + " beacon(s) encontrado(s).");
+                    LOG(TAG, "Iniciando detecção de beacons: " + collection.size() + " beacon(s) encontrado(s).");
 
                     for (Beacon beacon : collection) {
                         String nome, major, minor, rssi, distance, _url;
 
 
-                        Log.d(TAG, "Comunicando com o servidor.");
+                        LOG(TAG, "Comunicando com o servidor.");
                         try {
                             nome = beacon.getBluetoothName();
 
@@ -97,29 +122,42 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
 
                             // http://54.207.46.165:8081/apsearch/APService?device=wx-beacon&major=1&minor=21&distance=0.3&signal=-50d&option=beacon
 
-                            Log.d(TAG, "URL:\t" + _url);
+                            LOG(TAG, "URL:\t" + _url);
 
                             URL url = new URL(_url);
                             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
                             try {
                                 if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                                    Log.d(TAG, "Conexão efetuada");
+                                    LOG(TAG, "Conexão efetuada");
 
                                     String response = Util.convertStreamToString(urlConnection.getInputStream());
-                                    Log.d(TAG, "Resposta:\t" + response);
+                                    LOG(TAG, "Resposta:\t" + response);
 
                                     // ----------- PROCESSAR RESPOSTAS! ----------- //
 
+                                    LOG(TAG, "Parsing JSON...");
+                                    LOG(TAG, "-----------------");
+
+                                    produtos = Util.parserJason(response);
+
+                                    for (Produto produto : produtos) {
+                                        LOG(TAG, "PRODUTO:\tID:\t" + produto.getId() + "\tDESCRICAO:\t" + produto.getDescricao());
+                                    }
+
+                                    LOG(TAG, "-----------------");
+
                                 } else {
-                                    Log.d(TAG, "Conexão não efetuada");
+                                    LOG(TAG, "Conexão não efetuada");
                                 }
                             } catch (Exception e) {
-                                Log.d(TAG, "Erro:\t" + e.getMessage());
+                                LOG(TAG, "Erro:\t" + e.getMessage());
                             } finally {
                                 urlConnection.disconnect();
-                                Log.d(TAG, "Conexão encerrada");
+                                LOG(TAG, "Conexão encerrada");
                             }
+
+                            CHANGE_BEACON_QTD = false;
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
                         } catch (IOException e) {
@@ -132,15 +170,20 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
             }
         });
 
-
         try {
             // Inicia o monitoramento
 
-            Log.d(TAG, "Iniciando monitoramento.");
+            LOG(TAG, "Iniciando monitoramento.");
             beaconManager.startRangingBeaconsInRegion(new Region(REGION1, null, null, null));
             beaconManager.startMonitoringBeaconsInRegion(new Region(REGION1, null, null, null));
         } catch (RemoteException e) {
-            Log.e(TAG, e.getMessage(), e);
+            LOG(TAG, e.getMessage());
+        }
+    }
+
+    public void LOG(String tag, String msg) {
+        if (Util.LOG_ENABLED) {
+            Log.d(tag, msg);
         }
     }
 }

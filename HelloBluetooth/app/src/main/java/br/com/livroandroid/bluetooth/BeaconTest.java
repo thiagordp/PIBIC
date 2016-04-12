@@ -90,24 +90,6 @@ public class BeaconTest extends ActionBarActivity implements BeaconConsumer {
 
     @Override
     public void onBeaconServiceConnect() {
-      /*  beaconManager.setMonitorNotifier(new MonitorNotifier() {
-            @Override
-            public void didEnterRegion(Region region) {
-                Log.d(TAG, "I just saw an beacon for the first time!");
-                Log.d(TAG, "Region id - " + region.getUniqueId());
-            }
-
-            @Override
-            public void didExitRegion(Region region) {
-
-                Log.d(TAG, "I no longer see a beacon");
-                Log.d(TAG, "Region id - " + region.getUniqueId());
-            }
-
-            @Override
-            public void didDetermineStateForRegion(int state, Region region) {
-            }
-        });*/
 
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
@@ -135,7 +117,5 @@ public class BeaconTest extends ActionBarActivity implements BeaconConsumer {
             Log.e(TAG, e.getMessage(), e);
         }
     }
-
-
 }
 

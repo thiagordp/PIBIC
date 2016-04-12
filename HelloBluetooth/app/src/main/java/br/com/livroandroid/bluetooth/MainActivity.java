@@ -3,6 +3,7 @@ package br.com.livroandroid.bluetooth;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,6 +17,9 @@ import android.widget.Toast;
  */
 
 public class MainActivity extends ActionBarActivity implements AdapterView.OnItemClickListener {
+
+    private final String TAG = "MAIN_ACTIVITY";
+    private boolean LOG_ENABLED = false;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -49,12 +53,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     break;
                 case 2:
                     startActivity(new Intent(this, RecomendacaoActivity.class));
-                    // Garante que alguém pode te encontrar
-                    //  BluetoothUtil.makeVisible(this, 300);
                     break;
                 case 3:
-                   // Toast.makeText(getBaseContext(), "Selecionar imagens", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(this, BeaconTest.class));
+                    Toast.makeText(getBaseContext(), "Selecionar imagens", Toast.LENGTH_LONG).show();
+                    //startActivity(new Intent(this, BeaconTest.class));
                     break;
                 case 4:
                     startActivity(new Intent(this, ConfiguracaoActivity.class));
@@ -81,4 +83,12 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
             Toast.makeText(getBaseContext(), "Erro: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
+
+
+    public void LOG(String tag, String msg) {
+        if (Util.LOG_ENABLED) {
+            Log.d(tag, msg);
+        }
+    }
+
 }
