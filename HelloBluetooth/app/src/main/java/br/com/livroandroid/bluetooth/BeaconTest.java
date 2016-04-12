@@ -12,7 +12,6 @@ import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
-import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
@@ -91,7 +90,7 @@ public class BeaconTest extends ActionBarActivity implements BeaconConsumer {
 
     @Override
     public void onBeaconServiceConnect() {
-        beaconManager.setMonitorNotifier(new MonitorNotifier() {
+      /*  beaconManager.setMonitorNotifier(new MonitorNotifier() {
             @Override
             public void didEnterRegion(Region region) {
                 Log.d(TAG, "I just saw an beacon for the first time!");
@@ -108,7 +107,7 @@ public class BeaconTest extends ActionBarActivity implements BeaconConsumer {
             @Override
             public void didDetermineStateForRegion(int state, Region region) {
             }
-        });
+        });*/
 
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override

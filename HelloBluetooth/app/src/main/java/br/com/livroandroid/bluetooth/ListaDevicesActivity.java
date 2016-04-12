@@ -32,6 +32,7 @@ import java.util.Vector;
  */
 public class ListaDevicesActivity extends BluetoothCheckActivity implements AdapterView.OnItemClickListener {
     private final String TAG = "ListaDevicesActivity";
+    private final String UTF8 = "UTF-8";
     protected List<BluetoothDevice> lista;
     private ProgressDialog dialog;
     private ListView listView;
