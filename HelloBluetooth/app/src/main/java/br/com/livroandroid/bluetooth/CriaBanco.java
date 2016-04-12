@@ -41,12 +41,12 @@ public class CriaBanco extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-/*
+
         if (oldVersion != newVersion) {
             sqLiteDatabase.execSQL("drop table if exists " + TABELA);
             Log.d("CRIA_BANCO", "Update");
             onCreate(sqLiteDatabase);
-        }*/
+        }
     }
 
 

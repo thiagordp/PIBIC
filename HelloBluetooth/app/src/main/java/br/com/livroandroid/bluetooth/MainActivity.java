@@ -1,18 +1,13 @@
 package br.com.livroandroid.bluetooth;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import java.io.File;
 
 /**
  * Exemplo de bluetooth
@@ -31,8 +26,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         String[] items = new String[] {
                 "Verificar e ativar Bluetooth",
                 "Buscar devices",
-                "Ficar visível",
-                "altBeacon Teste",
+                "Recomendação",
+                "Imagens",
+                "Configuração",
                 "Sair"};
 
         // Atribuição dos itens ao List View
@@ -52,14 +48,17 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     startActivity(new Intent(this, ListaDevicesActivity.class));
                     break;
                 case 2:
+                    startActivity(new Intent(this, RecomendacaoActivity.class));
                     // Garante que alguém pode te encontrar
-                    BluetoothUtil.makeVisible(this, 300);
+                    //  BluetoothUtil.makeVisible(this, 300);
                     break;
                 case 3:
-                    startActivity(new Intent(this, BeaconTest.class));
+                    Toast.makeText(getBaseContext(), "Selecionar imagens", Toast.LENGTH_LONG).show();
+                    //startActivity(new Intent(this, BeaconTest.class));
                     break;
                 case 4:
-
+                    startActivity(new Intent(this, ConfiguracaoActivity.class));
+                    /*
                     File file = Environment.getExternalStorageDirectory();
 
                     String img = "pc.png";
@@ -72,17 +71,18 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
                     ImageView imageView = (ImageView) findViewById(R.id.imageView);
 
-                    imageView.setImageBitmap(bitmap);
-
+                    imageView.setImageBitmap(bitmap);*/
                     break;
 
+                case 5:
+                    startActivity(new Intent(this, ConfiguracaoActivity.class));
+                    break;
                 default:
                     finish();
                     break;
             }
         } catch (Exception e) {
-            Toast.makeText(getBaseContext(), "Erro :" + e.getMessage(), Toast.LENGTH_LONG).show();
-
+            Toast.makeText(getBaseContext(), "Erro: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }

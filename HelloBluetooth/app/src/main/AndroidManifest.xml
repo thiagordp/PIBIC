@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!--Referência:
+<!--
+Referência:
     http://stackoverflow.com/questions/8854359/exception-open-failed-eacces-permission-denied-on-android
-    -->
-<manifest
+-->
+<manifest package="br.com.livroandroid.bluetooth"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    package="br.com.livroandroid.bluetooth"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
+    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
@@ -43,6 +41,10 @@
             android:name=".BeaconTest"
             android:label="@string/beacon_teste"
             android:parentActivityName=".MainActivity"/>
+        <activity android:name=".RecomendacaoActivity">
+        </activity>
+        <activity android:name=".ConfiguracaoActivity">
+        </activity>
     </application>
 
 </manifest>

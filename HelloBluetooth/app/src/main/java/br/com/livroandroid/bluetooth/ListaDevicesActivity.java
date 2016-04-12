@@ -68,7 +68,6 @@ public class ListaDevicesActivity extends BluetoothCheckActivity implements Adap
                         try {
                             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                                 String response = convertStreamToString(urlConnection.getInputStream());
-
                                 respostas.add(response);
                             } else {
                                 respostas.add("Deu Erro!");

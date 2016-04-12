@@ -29,13 +29,6 @@ public class BancoController {
     }
 
     /**
-     * Criação do Banco SQLite
-     */
-    public void criaBanco() {
-
-    }
-
-    /**
      * Inserção da imagem
      */
     public void insereImagem(String caminhoImagem) throws Exception {
@@ -93,6 +86,4 @@ public class BancoController {
         db.close();
         return cursor;
     }*/
-
-
 }

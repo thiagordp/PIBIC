@@ -26,8 +26,6 @@ public class Util {
 
     }
 
-
-
     /*Retorna a imagem correspondente ao array de bytes.*/
     public static Bitmap getPhoto(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
