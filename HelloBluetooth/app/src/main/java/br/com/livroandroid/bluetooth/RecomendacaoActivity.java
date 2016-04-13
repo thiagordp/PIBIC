@@ -1,9 +1,15 @@
 package br.com.livroandroid.bluetooth;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.altbeacon.beacon.Beacon;
@@ -20,6 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -138,13 +145,64 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
 
                                     LOG(TAG, "Parsing JSON...");
                                     LOG(TAG, "-----------------");
-
                                     produtos = Util.parserJason(response);
 
+                                    BancoController controller = new BancoController(getBaseContext());
+
+                                    LOG(TAG, String.valueOf(produtos.size()));
+                                    List<Produto> produtosImagem = new ArrayList<>();
+
                                     for (Produto produto : produtos) {
-                                        LOG(TAG, "PRODUTO:\tID:\t" + produto.getId() + "\tDESCRICAO:\t" + produto.getDescricao());
+                                        LOG(TAG, "PRODUTO:\tID:\t" + produto.getId() + "\tDESCRICAO:\t'" + produto.getDescricao() + "'");
+
+                                        byte[] image = controller.selectImagem(produto.getId());
+
+                                        // Se a imagem existe no banco.
+                                        if (image != null) {
+
+                                            Bitmap bitmap = Util.getPhoto(image);
+                                            LOG(TAG, "DEBUG5");
+                                            produto.setImagem(bitmap);
+
+                                            produtosImagem.add(produto);
+                                        }
                                     }
 
+                                    produtos.clear();
+
+                                    TableLayout tableLayout = (TableLayout) findViewById(R.id.tableLayout);
+
+                                    for (Produto produto : produtosImagem) {
+
+                                        TableRow tableRow = new TableRow(getBaseContext());
+
+                                        tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.FILL_PARENT));
+
+
+                                        TextView tvId = new TextView(getBaseContext());
+                                        tvId.setText(produto.getId());
+                                        tvId.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                                                TableRow.LayoutParams.MATCH_PARENT));
+
+
+                                        TextView tvDescricao = new TextView(getBaseContext());
+                                        tvDescricao.setText(produto.getDescricao());
+                                        tvDescricao.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                                                TableRow.LayoutParams.MATCH_PARENT));
+
+                                        ImageView imageView = new ImageButton(getBaseContext());
+                                        imageView.setImageBitmap(produto.getImagem());
+                                        imageView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+
+                                        tableRow.addView(tvId);
+                                        tableRow.addView(tvDescricao);
+                                        tableRow.addView(imageView);
+
+                                        tableLayout.addView(tableRow,
+                                                new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+                                    }
+
+                                    controller.closeDB();
                                     LOG(TAG, "-----------------");
 
                                 } else {
@@ -154,6 +212,7 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
                                 LOG(TAG, "Erro:\t" + e.getMessage());
                             } finally {
                                 urlConnection.disconnect();
+
                                 LOG(TAG, "Conexão encerrada");
                             }
 

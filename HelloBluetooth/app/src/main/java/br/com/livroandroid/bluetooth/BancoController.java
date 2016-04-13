@@ -54,15 +54,18 @@ public class BancoController {
      * Seleciona a imagem correspondente ao ID fornecido
      */
     public byte[] selectImagem(int id) throws Exception {
-        String sql = "SELECT " + CriaBanco.ID + " WHERE " + CriaBanco.ID + " = " + id;
+        // String sql = "SELECT " + CriaBanco.ID + " WHERE " + CriaBanco.ID + " = " + id;
+        Log.d(TAG, "Getting db");
         db = criaBanco.getWritableDatabase();
+        Log.d(TAG, "DB gotted");
 
         Cursor cursor = db.query(CriaBanco.TABELA, null, CriaBanco.ID + "= '" + id + "'", null, null, null, null, null);
 
-        Log.d(TAG, String.valueOf(cursor.getCount()));
-
         byte[] bytes = null;
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
+
+            Log.d(TAG, String.valueOf(cursor.getCount()));
+
             do {
                 bytes = cursor.getBlob(cursor.getColumnIndex(CriaBanco.IMAGEM));
             } while (cursor.moveToNext());
@@ -70,7 +73,12 @@ public class BancoController {
 
         return bytes;
     }
-/*
+
+    public void closeDB() {
+        this.db.close();
+    }
+
+    /*
     public Cursor carregaDados() {
 
         Cursor cursor;
@@ -85,5 +93,6 @@ public class BancoController {
 
         db.close();
         return cursor;
-    }*/
+    }
+    */
 }

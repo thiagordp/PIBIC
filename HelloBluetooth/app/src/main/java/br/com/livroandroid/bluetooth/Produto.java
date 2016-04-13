@@ -1,6 +1,6 @@
 package br.com.livroandroid.bluetooth;
 
-import java.sql.Blob;
+import android.graphics.Bitmap;
 
 /**
  * Created by Thiago Dal Pont on 12/04/2016.
@@ -9,7 +9,7 @@ public class Produto {
 
     private int id;
     private String descricao;
-    private Blob imagem;
+    private Bitmap imagem;
 
 
     public int getId() {
@@ -28,11 +28,11 @@ public class Produto {
         this.descricao = descricao;
     }
 
-    public Blob getImagem() {
+    public Bitmap getImagem() {
         return imagem;
     }
 
-    public void setImagem(Blob imagem) {
+    public void setImagem(Bitmap imagem) {
         this.imagem = imagem;
     }
 }

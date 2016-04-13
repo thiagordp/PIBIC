@@ -29,6 +29,7 @@ public class CriaBanco extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
         Log.d(TAG, "Criando banco");
         String sql = "CREATE TABLE if not exists " + TABELA + "(" +
                 ID + " integer primary key autoincrement, " +
@@ -49,5 +50,10 @@ public class CriaBanco extends SQLiteOpenHelper {
         }
     }
 
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
 
+        Log.d(TAG, "ON_OPEN");
+    }
 }
