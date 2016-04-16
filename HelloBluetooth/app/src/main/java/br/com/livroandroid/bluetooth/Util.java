@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -29,7 +30,7 @@ public class Util {
     private final String TAG = "UTIL";
 
     /**
-     * Retorna os bytes de uma imagem
+     * Retorna os bytes de um arquivo do caminho
      */
     public static byte[] getBytes(String path) throws Exception {
 
@@ -40,7 +41,6 @@ public class Util {
         buffer.read(bytes);
 
         return bytes;
-
     }
 
     /**
@@ -97,5 +97,11 @@ public class Util {
         }
 
         return produtoList;
+    }
+
+    public static int dpToPx(int dp, Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
     }
 }

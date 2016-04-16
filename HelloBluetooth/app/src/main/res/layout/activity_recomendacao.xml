@@ -11,14 +11,16 @@
     tools:context="br.com.livroandroid.bluetooth.RecomendacaoActivity">
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="wrap_content">
 
         <TableLayout
-            android:id="@+id/tableLayout"
+            android:id="@+id/tabela"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
+            android:layout_height="wrap_content"
+            android:shrinkColumns="*"
+            android:stretchColumns="*">
 
         </TableLayout>
     </ScrollView>

@@ -1,6 +1,7 @@
 package br.com.livroandroid.bluetooth;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v7.app.ActionBarActivity;
@@ -150,7 +151,7 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
                                     BancoController controller = new BancoController(getBaseContext());
 
                                     LOG(TAG, String.valueOf(produtos.size()));
-                                    List<Produto> produtosImagem = new ArrayList<>();
+                                    final List<Produto> produtosImagem = new ArrayList<>();
 
                                     for (Produto produto : produtos) {
                                         LOG(TAG, "PRODUTO:\tID:\t" + produto.getId() + "\tDESCRICAO:\t'" + produto.getDescricao() + "'");
@@ -170,36 +171,56 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
 
                                     produtos.clear();
 
-                                    TableLayout tableLayout = (TableLayout) findViewById(R.id.tableLayout);
-
-                                    for (Produto produto : produtosImagem) {
-
-                                        TableRow tableRow = new TableRow(getBaseContext());
-
-                                        tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.FILL_PARENT));
+                                    Log.d(TAG, "ID\t" + R.id.tabela);
+                                    final TableLayout tableLayout = (TableLayout) findViewById(R.id.tabela);
 
 
-                                        TextView tvId = new TextView(getBaseContext());
-                                        tvId.setText(produto.getId());
-                                        tvId.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                                                TableRow.LayoutParams.MATCH_PARENT));
+                                    Log.d(TAG, "IMG_FINAL\t" + String.valueOf(produtosImagem.size()));
+
+                                    for (final Produto produto : produtosImagem) {
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                TableRow tableRow = new TableRow(getBaseContext());
+
+                                                tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
 
 
-                                        TextView tvDescricao = new TextView(getBaseContext());
-                                        tvDescricao.setText(produto.getDescricao());
-                                        tvDescricao.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                                                TableRow.LayoutParams.MATCH_PARENT));
+                                                TextView tvId = new TextView(getBaseContext());
+                                                tvId.setWidth(Util.dpToPx(20, getBaseContext()));
+                                                tvId.setText(String.valueOf(produto.getId()));
+                                                tvId.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                                                        TableRow.LayoutParams.MATCH_PARENT));
 
-                                        ImageView imageView = new ImageButton(getBaseContext());
-                                        imageView.setImageBitmap(produto.getImagem());
-                                        imageView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+                                                TextView tvDescricao = new TextView(getBaseContext());
+                                                tvId.setWidth(Util.dpToPx(50, getBaseContext()));
+                                                tvDescricao.setText(produto.getDescricao());
+                                                tvDescricao.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                                                        TableRow.LayoutParams.MATCH_PARENT));
 
-                                        tableRow.addView(tvId);
-                                        tableRow.addView(tvDescricao);
-                                        tableRow.addView(imageView);
 
-                                        tableLayout.addView(tableRow,
-                                                new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+                                                ImageView imageView = new ImageButton(getBaseContext());
+                                                imageView.setBackgroundColor(Color.TRANSPARENT);
+                                                imageView.setImageBitmap(
+                                                        Bitmap.createScaledBitmap(
+                                                                produto.getImagem(),
+                                                                Util.dpToPx(50, getBaseContext()),
+                                                                Util.dpToPx(50, getBaseContext()), false));
+                                                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                                                imageView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
+                                                imageView.setMaxHeight(Util.dpToPx(1, getBaseContext()));
+                                                imageView.setMaxWidth(Util.dpToPx(1, getBaseContext()));
+
+                                                tableRow.addView(tvId);
+                                                tableRow.addView(tvDescricao);
+                                                tableRow.addView(imageView);
+
+                                                tableLayout.addView(tableRow,
+                                                        new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+                                            }
+                                        });
+
                                     }
 
                                     controller.closeDB();
@@ -209,7 +230,7 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
                                     LOG(TAG, "Conexão não efetuada");
                                 }
                             } catch (Exception e) {
-                                LOG(TAG, "Erro:\t" + e.getMessage());
+                                LOG(TAG, "Erro:\t" + e.getMessage() + "\t" + e.getLocalizedMessage());
                             } finally {
                                 urlConnection.disconnect();
 
