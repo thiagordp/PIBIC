@@ -128,8 +128,6 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
                             _url += "&signal=" + rssi + "d";
                             _url += "&option=beacon";
 
-                            // http://54.207.46.165:8081/apsearch/APService?device=wx-beacon&major=1&minor=21&distance=0.3&signal=-50d&option=beacon
-
                             LOG(TAG, "URL:\t" + _url);
 
                             URL url = new URL(_url);
@@ -209,8 +207,6 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
                                                                 Util.dpToPx(50, getBaseContext()), false));
                                                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                                                 imageView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-                                                imageView.setMaxHeight(Util.dpToPx(1, getBaseContext()));
-                                                imageView.setMaxWidth(Util.dpToPx(1, getBaseContext()));
 
                                                 tableRow.addView(tvId);
                                                 tableRow.addView(tvDescricao);
