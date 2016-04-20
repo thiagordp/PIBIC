@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TableLayout;
@@ -89,13 +90,13 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
             }
         });
 
+        // É chamado uma vez por segundo.
         beaconManager.setRangeNotifier(new RangeNotifier() {
+
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
-             /*   if (Util.isWifiConnected(getBaseContext()) == false) {
-                    Toast.makeText(getBaseContext(), "Sem rede de internet!", Toast.LENGTH_LONG).show();
-                }*/
 
+                // Caso tenha mais de um beacon na região e o número em relação à última vez mudou.
                 if (collection.size() > 0 && CHANGE_BEACON_QTD == true) {
 
                     LOG(TAG, "Iniciando detecção de beacons: " + collection.size() + " beacon(s) encontrado(s).");
@@ -103,8 +104,8 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
                     for (Beacon beacon : collection) {
                         String nome, major, minor, rssi, distance, _url;
 
-
                         LOG(TAG, "Comunicando com o servidor.");
+
                         try {
                             nome = beacon.getBluetoothName();
 
@@ -117,9 +118,11 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
                             minor = URLEncoder.encode(beacon.getId3().toString(), UTF_8);
                             rssi = URLEncoder.encode(String.valueOf(beacon.getRssi()), UTF_8);
 
-                            DecimalFormat format = new DecimalFormat("#.#");
+                            DecimalFormat format = new DecimalFormat("#.#"); // Colocar no Util
                             distance = URLEncoder.encode(format.format(beacon.getDistance()), UTF_8);
 
+
+                            // Separar a url em outra função.
                             _url = "http://54.207.46.165:8081/apsearch/APService?";
                             _url += "device=" + nome;
                             _url += "&major=" + major;
@@ -168,10 +171,7 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
                                     }
 
                                     produtos.clear();
-
-                                    Log.d(TAG, "ID\t" + R.id.tabela);
                                     final TableLayout tableLayout = (TableLayout) findViewById(R.id.tabela);
-
 
                                     Log.d(TAG, "IMG_FINAL\t" + String.valueOf(produtosImagem.size()));
 
@@ -183,17 +183,21 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
                                                 TableRow tableRow = new TableRow(getBaseContext());
 
                                                 tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-
+                                                tableRow.setGravity(Gravity.CENTER_HORIZONTAL);
 
                                                 TextView tvId = new TextView(getBaseContext());
                                                 tvId.setWidth(Util.dpToPx(20, getBaseContext()));
                                                 tvId.setText(String.valueOf(produto.getId()));
+                                                tvId.setTextColor(Color.BLACK);
+                                                tvId.setTextSize(20);
                                                 tvId.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                                                         TableRow.LayoutParams.MATCH_PARENT));
 
                                                 TextView tvDescricao = new TextView(getBaseContext());
                                                 tvId.setWidth(Util.dpToPx(50, getBaseContext()));
                                                 tvDescricao.setText(produto.getDescricao());
+                                                tvDescricao.setTextColor(Color.BLACK);
+                                                tvDescricao.setTextSize(20);
                                                 tvDescricao.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                                                         TableRow.LayoutParams.MATCH_PARENT));
 
@@ -257,7 +261,9 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
         }
     }
 
-    public void LOG(String tag, String msg) {
+    //private void
+
+    private void LOG(String tag, String msg) {
         if (Util.LOG_ENABLED) {
             Log.d(tag, msg);
         }
