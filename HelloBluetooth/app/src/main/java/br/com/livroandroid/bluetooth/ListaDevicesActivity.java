@@ -60,7 +60,7 @@ public class ListaDevicesActivity extends BluetoothCheckActivity implements Adap
                     count++;
 
                     try {
-                        String encodedUrl = URLEncoder.encode(device.getAddress(), "UTF-8");
+                        String encodedUrl = URLEncoder.encode(device.getAddress(), UTF8);
 
                         String minha_url = "http://54.207.46.165:8081/apsearch/APService?" + "id=" + encodedUrl + "&option=beacon";
 

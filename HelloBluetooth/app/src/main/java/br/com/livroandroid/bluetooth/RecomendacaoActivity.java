@@ -1,18 +1,9 @@
 package br.com.livroandroid.bluetooth;
 
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Gravity;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -22,12 +13,9 @@ import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,6 +27,7 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
     private final String REGION1 = "REGIAO_1";
     private BeaconManager beaconManager;
     private boolean CHANGE_BEACON_QTD = true;
+    private int lastBeaconCount;
     private List<Produto> produtos;
     private boolean LOG_ENABLED = false;
 
@@ -48,8 +37,9 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
         setContentView(R.layout.activity_recomendacao);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         LOG(TAG, "Activity created");
+
+        // Verificar se há bluetooth e internet //
 
         // Configuração do detector de beacons.
         beaconManager = BeaconManager.getInstanceForApplication(this);
@@ -102,157 +92,17 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
                     LOG(TAG, "Iniciando detecção de beacons: " + collection.size() + " beacon(s) encontrado(s).");
 
                     for (Beacon beacon : collection) {
-                        String nome, major, minor, rssi, distance, _url;
 
-                        LOG(TAG, "Comunicando com o servidor.");
-
-                        try {
-                            nome = beacon.getBluetoothName();
-
-                            if (nome == null) {
-                                nome = "wgx-beacon";
-                            }
-
-                            nome = URLEncoder.encode(nome, UTF_8);
-                            major = URLEncoder.encode(beacon.getId2().toString(), UTF_8);
-                            minor = URLEncoder.encode(beacon.getId3().toString(), UTF_8);
-                            rssi = URLEncoder.encode(String.valueOf(beacon.getRssi()), UTF_8);
-
-                            DecimalFormat format = new DecimalFormat("#.#"); // Colocar no Util
-                            distance = URLEncoder.encode(format.format(beacon.getDistance()), UTF_8);
-
-
-                            // Separar a url em outra função.
-                            _url = "http://54.207.46.165:8081/apsearch/APService?";
-                            _url += "device=" + nome;
-                            _url += "&major=" + major;
-                            _url += "&minor" + minor;
-                            _url += "&distance" + distance;
-                            _url += "&signal=" + rssi + "d";
-                            _url += "&option=beacon";
-
-                            LOG(TAG, "URL:\t" + _url);
-
-                            URL url = new URL(_url);
-                            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-                            try {
-                                if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                                    LOG(TAG, "Conexão efetuada");
-
-                                    String response = Util.convertStreamToString(urlConnection.getInputStream());
-                                    LOG(TAG, "Resposta:\t" + response);
-
-                                    // ----------- PROCESSAR RESPOSTAS! ----------- //
-
-                                    LOG(TAG, "Parsing JSON...");
-                                    LOG(TAG, "-----------------");
-                                    produtos = Util.parserJason(response);
-
-                                    BancoController controller = new BancoController(getBaseContext());
-
-                                    LOG(TAG, String.valueOf(produtos.size()));
-                                    final List<Produto> produtosImagem = new ArrayList<>();
-
-                                    for (Produto produto : produtos) {
-                                        LOG(TAG, "PRODUTO:\tID:\t" + produto.getId() + "\tDESCRICAO:\t'" + produto.getDescricao() + "'");
-
-                                        byte[] image = controller.selectImagem(produto.getId());
-
-                                        // Se a imagem existe no banco.
-                                        if (image != null) {
-
-                                            Bitmap bitmap = Util.getPhoto(image);
-                                            LOG(TAG, "DEBUG5");
-                                            produto.setImagem(bitmap);
-
-                                            produtosImagem.add(produto);
-                                        }
-                                    }
-
-                                    produtos.clear();
-                                    final TableLayout tableLayout = (TableLayout) findViewById(R.id.tabela);
-
-                                    Log.d(TAG, "IMG_FINAL\t" + String.valueOf(produtosImagem.size()));
-
-                                    for (final Produto produto : produtosImagem) {
-
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                TableRow tableRow = new TableRow(getBaseContext());
-
-                                                tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-                                                tableRow.setGravity(Gravity.CENTER_HORIZONTAL);
-
-                                                TextView tvId = new TextView(getBaseContext());
-                                                tvId.setWidth(Util.dpToPx(20, getBaseContext()));
-                                                tvId.setText(String.valueOf(produto.getId()));
-                                                tvId.setTextColor(Color.BLACK);
-                                                tvId.setTextSize(20);
-                                                tvId.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                                                        TableRow.LayoutParams.MATCH_PARENT));
-
-                                                TextView tvDescricao = new TextView(getBaseContext());
-                                                tvId.setWidth(Util.dpToPx(50, getBaseContext()));
-                                                tvDescricao.setText(produto.getDescricao());
-                                                tvDescricao.setTextColor(Color.BLACK);
-                                                tvDescricao.setTextSize(20);
-                                                tvDescricao.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                                                        TableRow.LayoutParams.MATCH_PARENT));
-
-
-                                                ImageView imageView = new ImageButton(getBaseContext());
-                                                imageView.setBackgroundColor(Color.TRANSPARENT);
-                                                imageView.setImageBitmap(
-                                                        Bitmap.createScaledBitmap(
-                                                                produto.getImagem(),
-                                                                Util.dpToPx(50, getBaseContext()),
-                                                                Util.dpToPx(50, getBaseContext()), false));
-                                                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                                                imageView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));
-
-                                                tableRow.addView(tvId);
-                                                tableRow.addView(tvDescricao);
-                                                tableRow.addView(imageView);
-
-                                                tableLayout.addView(tableRow,
-                                                        new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
-                                            }
-                                        });
-
-                                    }
-
-                                    controller.closeDB();
-                                    LOG(TAG, "-----------------");
-
-                                } else {
-                                    LOG(TAG, "Conexão não efetuada");
-                                }
-                            } catch (Exception e) {
-                                LOG(TAG, "Erro:\t" + e.getMessage() + "\t" + e.getLocalizedMessage());
-                            } finally {
-                                urlConnection.disconnect();
-
-                                LOG(TAG, "Conexão encerrada");
-                            }
-
-                            CHANGE_BEACON_QTD = false;
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
+                        enviaDadoBeacon(beacon); // Asynctask
+                        CHANGE_BEACON_QTD = false;
                     }
                 }
             }
         });
 
         try {
-            // Inicia o monitoramento
 
+            // Inicia o monitoramento
             LOG(TAG, "Iniciando monitoramento.");
             beaconManager.startRangingBeaconsInRegion(new Region(REGION1, null, null, null));
             beaconManager.startMonitoringBeaconsInRegion(new Region(REGION1, null, null, null));
@@ -261,11 +111,64 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
         }
     }
 
-    //private void
+    private void enviaDadoBeacon(Beacon beacon) {
+        AsyncTaskBeacon task = new AsyncTaskBeacon(
+                getBaseContext(),
+                getWindow().getDecorView().getRootView()
+        );
+        task.execute(beacon);
+    }
 
+    //private void
     private void LOG(String tag, String msg) {
         if (Util.LOG_ENABLED) {
             Log.d(tag, msg);
+        }
+    }
+
+
+    private void comunicaServidor(String name, int major, int minor, double rssi, double distance) throws Exception {
+        String _nome, _major, _minor, _rssi, _distance, _url;
+
+        // Obtenção dos parâmetros que serão passados pra URL.
+        _nome = URLEncoder.encode(name, "UTF-8");
+        _major = URLEncoder.encode(String.valueOf(major), UTF_8);
+        _minor = URLEncoder.encode(String.valueOf(minor), UTF_8);
+        _rssi = URLEncoder.encode(String.valueOf(rssi), UTF_8);
+        _distance = URLEncoder.encode(Util.getFormattedDistance(distance), UTF_8);
+
+        // Separar a url em outra função.
+        _url = "http://54.207.46.165:8081/apsearch/APService?";
+        _url += "device=" + _nome;
+        _url += "&major=" + _major;
+        _url += "&minor" + _minor;
+        _url += "&distance" + _distance;
+        _url += "&signal=" + _rssi + "d";
+        _url += "&option=beacon";
+
+        LOG(TAG, "URL:\t" + _url);
+
+        URL url = new URL(_url);
+
+        // Abre a conexão com o servidor que hospeda os objetos da URL.
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+        if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            LOG(TAG, "Conexão efetuada");
+
+            String response = Util.convertStreamToString(urlConnection.getInputStream());
+            LOG(TAG, "Resposta:\t" + response);
+
+            // ----------- PROCESSAR RESPOSTAS! ----------- //
+
+            LOG(TAG, "Parsing JSON...");
+            LOG(TAG, "-----------------");
+            produtos = Util.parserJason(response);
+
+            BancoController controller = new BancoController(getBaseContext());
+
+            LOG(TAG, String.valueOf(produtos.size()));
+            final List<Produto> produtosImagem = new ArrayList<>();
         }
     }
 }

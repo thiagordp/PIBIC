@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -69,7 +70,6 @@ public class Util {
         return (networkInfo != null && networkInfo.isConnected());
     }
 
-
     /**
      * Converte JSON para uma lista de produtos
      */
@@ -103,5 +103,10 @@ public class Util {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         return px;
+    }
+
+    public static String getFormattedDistance(double distance) {
+        DecimalFormat format = new DecimalFormat("#.#"); // Colocar no Util
+        return format.format(distance);
     }
 }
