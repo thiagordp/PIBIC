@@ -59,10 +59,9 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     break;
                 case 3:
                     Toast.makeText(getBaseContext(), "Selecionar imagens", Toast.LENGTH_LONG).show();
-                    //startActivity(new Intent(this, BeaconTest.class));
                     break;
                 case 4:
-                  //  startActivity(new Intent(this, ConfiguracaoActivity.class));
+                    // Inserção de imagens
 
                     File file = Environment.getExternalStorageDirectory();
 

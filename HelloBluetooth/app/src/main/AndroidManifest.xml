@@ -37,10 +37,6 @@ Referência:
             android:parentActivityName=".MainActivity"/>
         <!-- <activity android:name=".BluetoothChatServerActivity" android:label="@string/chat_server" android:parentActivityName=".MainActivity" /> -->
 
-        <activity
-            android:name=".BeaconTest"
-            android:label="@string/beacon_teste"
-            android:parentActivityName=".MainActivity"/>
         <activity android:name=".RecomendacaoActivity">
         </activity>
         <activity android:name=".ConfiguracaoActivity">

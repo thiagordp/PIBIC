@@ -43,6 +43,7 @@ public class AsyncTaskBeacon extends AsyncTask<Beacon, Void, List<Produto>> {
     }
 
     protected List<Produto> doInBackground(Beacon... beacons) {
+        // Beacon... é um vetor de parâmetros do tipo Beacon.
 
         String nome, major, minor, rssi, distance, urlBeacon;
 
