@@ -65,7 +65,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
                     File file = Environment.getExternalStorageDirectory();
 
-                    String img = "smartphone.png";
+                    String img = "livro.png";
                     String path = file.getAbsolutePath().toString() + "/" + img;
 
                     BancoController controller = new BancoController(getBaseContext());

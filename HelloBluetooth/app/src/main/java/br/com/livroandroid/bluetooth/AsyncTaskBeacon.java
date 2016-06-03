@@ -54,6 +54,7 @@ public class AsyncTaskBeacon extends AsyncTask<Beacon, Void, List<Produto>> {
         distance = "0.0";
 
         Log.d(TAG, "Comunicando com o servidor.");
+        Log.d(TAG, "Nº beacons:\t" + beacons.length);
 
         try {
             nome = URLEncoder.encode(beacons[0].getBluetoothName() == null ? "Beacon" : beacons[0].getBluetoothName(), "UTF-8");
@@ -70,8 +71,8 @@ public class AsyncTaskBeacon extends AsyncTask<Beacon, Void, List<Produto>> {
         urlBeacon = "http://54.207.46.165:8081/apsearch/APService?";
         urlBeacon += "device=" + nome;
         urlBeacon += "&major=" + major;
-        urlBeacon += "&minor" + minor;
-        urlBeacon += "&distance" + distance;
+        urlBeacon += "&minor=" + minor;
+        urlBeacon += "&distance=" + distance;
         urlBeacon += "&signal=" + rssi + "d";
         urlBeacon += "&option=beacon";
 
@@ -79,6 +80,8 @@ public class AsyncTaskBeacon extends AsyncTask<Beacon, Void, List<Produto>> {
             URL url = new URL(urlBeacon);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
+            Log.d(TAG, urlBeacon);
+            Log.d(TAG, "UUID\t" + beacons[0].getId1());
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 String response = Util.convertStreamToString(urlConnection.getInputStream());
                 List<Produto> produtoJSON = Util.parserJason(response);
@@ -100,6 +103,8 @@ public class AsyncTaskBeacon extends AsyncTask<Beacon, Void, List<Produto>> {
                         produtoBanco.add(produto);
                     }
                 }
+
+                controller.closeDB();
 
                 return produtoBanco;
             }

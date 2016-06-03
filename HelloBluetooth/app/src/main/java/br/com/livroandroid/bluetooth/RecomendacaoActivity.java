@@ -27,6 +27,7 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
     private final String REGION1 = "REGIAO_1";
     private BeaconManager beaconManager;
     private boolean CHANGE_BEACON_QTD = true;
+    private List<Beacon> beaconEnviado;
     private int lastBeaconCount;
     private List<Produto> produtos;
     private boolean LOG_ENABLED = false;
@@ -48,6 +49,7 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
         beaconManager.setBackgroundBetweenScanPeriod(1l);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         beaconManager.bind(this);
+        beaconEnviado = new ArrayList<>();
 
         LOG(TAG, "Configuração de beacon efetuada");
     }
@@ -64,14 +66,11 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
         beaconManager.setMonitorNotifier(new MonitorNotifier() {
             @Override
             public void didEnterRegion(Region region) {
-                CHANGE_BEACON_QTD = true;
                 LOG(TAG, "Beacon entrou na região");
             }
 
             @Override
             public void didExitRegion(Region region) {
-                CHANGE_BEACON_QTD = true;
-
                 LOG(TAG, "Beacon saiu na região");
             }
 
@@ -87,14 +86,15 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
             public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
 
                 // Caso tenha mais de um beacon na região e o número em relação à última vez mudou.
-                if (collection.size() > 0 && CHANGE_BEACON_QTD == true) {
+                if (collection.size() > 0) {
 
                     LOG(TAG, "Iniciando detecção de beacons: " + collection.size() + " beacon(s) encontrado(s).");
 
                     for (Beacon beacon : collection) {
-
-                        enviaDadoBeacon(beacon); // Asynctask
-                        CHANGE_BEACON_QTD = false;
+                        if (!beaconEnviado.contains(beacon)) {
+                            enviaDadoBeacon(beacon);        // Asynctask
+                            beaconEnviado.add(beacon);
+                        }
                     }
                 }
             }
