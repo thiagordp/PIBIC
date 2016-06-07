@@ -68,20 +68,26 @@ public class AsyncTaskBeacon extends AsyncTask<Beacon, Void, List<Produto>> {
             return null;
         }
 
-        urlBeacon = "http://54.207.46.165:8081/apsearch/APService?";
-        urlBeacon += "device=" + nome;
-        urlBeacon += "&major=" + major;
-        urlBeacon += "&minor=" + minor;
-        urlBeacon += "&distance=" + distance;
-        urlBeacon += "&signal=" + rssi + "d";
-        urlBeacon += "&option=beacon";
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        Log.d(TAG, "BEFORE");
+        String path = Util.getConfigPathData();
+        stringBuilder.append(path);
+        stringBuilder.append("device=" + nome);
+        stringBuilder.append("&major=" + major);
+        stringBuilder.append("&minor=" + minor);
+        stringBuilder.append("&distance=" + distance);
+        stringBuilder.append("&signal=" + rssi + "d");
+        stringBuilder.append("&option=beacon");
+
+        Log.d(TAG, stringBuilder.toString());
+        Log.d(TAG, "AFTER");
 
         try {
-            URL url = new URL(urlBeacon);
+            URL url = new URL(stringBuilder.toString());
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-            Log.d(TAG, urlBeacon);
-            Log.d(TAG, "UUID\t" + beacons[0].getId1());
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 String response = Util.convertStreamToString(urlConnection.getInputStream());
                 List<Produto> produtoJSON = Util.parserJason(response);

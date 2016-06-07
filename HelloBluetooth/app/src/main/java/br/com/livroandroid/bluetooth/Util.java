@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -13,6 +14,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,6 +30,13 @@ public class Util {
 
 
     public final static boolean LOG_ENABLED = true;
+
+    public final static int OPT_CHECK_BLUETOOTH = 0;
+    public final static int OPT_LIST_DEVICE = 1;
+    public final static int OPT_RECOMENDACAO = 2;
+    public final static int OPT_SELECT_IMG = 3;
+    public final static int OPT_CONFIG = 4;
+    public final static String CONFIG_PATH = Environment.getExternalStorageDirectory().toString() + "/conf.dat";
     private final String TAG = "UTIL";
 
     /**
@@ -108,5 +117,27 @@ public class Util {
     public static String getFormattedDistance(double distance) {
         DecimalFormat format = new DecimalFormat("#.#"); // Colocar no Util
         return format.format(distance);
+    }
+
+    public static String getConfigPathData() {
+
+        String data = "";
+
+        try {
+            FileInputStream fileInputStream = new FileInputStream(Util.CONFIG_PATH);
+
+            byte[] dados = new byte[fileInputStream.available()];
+
+            fileInputStream.read(dados, 0, dados.length);
+
+            String string = new String(dados, 0, dados.length, "UTF-8");
+
+            data = string.replaceAll("\\s+", "");
+
+        } catch (IOException e) {
+            Log.d("UTIL", e.getMessage());
+        }
+
+        return data;
     }
 }

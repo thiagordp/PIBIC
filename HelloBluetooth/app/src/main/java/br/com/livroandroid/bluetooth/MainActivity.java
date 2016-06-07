@@ -2,7 +2,6 @@ package br.com.livroandroid.bluetooth;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
@@ -10,8 +9,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import java.io.File;
 
 /**
  * Exemplo de bluetooth
@@ -48,20 +45,21 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         try {
             switch (position) {
-                case 0:
+                case Util.OPT_CHECK_BLUETOOTH:
                     startActivity(new Intent(this, BluetoothCheckActivity.class));
                     break;
-                case 1:
+                case Util.OPT_LIST_DEVICE:
                     startActivity(new Intent(this, ListaDevicesActivity.class));
                     break;
-                case 2:
+                case Util.OPT_RECOMENDACAO:
                     startActivity(new Intent(this, RecomendacaoActivity.class));
                     break;
-                case 3:
+                case Util.OPT_SELECT_IMG:
                     Toast.makeText(getBaseContext(), "Selecionar imagens", Toast.LENGTH_LONG).show();
                     break;
-                case 4:
+                case Util.OPT_CONFIG:
                     // Inserção de imagens
+/*
 
                     File file = Environment.getExternalStorageDirectory();
 
@@ -76,6 +74,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     ImageView imageView = (ImageView) findViewById(R.id.imageView);
 
                     imageView.setImageBitmap(bitmap);*/
+
+                    startActivity(new Intent(this, ConfiguracaoActivity.class));
+
+
                     break;
                 default:
                     finish();
