@@ -45,13 +45,7 @@ public class AsyncTaskBeacon extends AsyncTask<Beacon, Void, List<Produto>> {
     protected List<Produto> doInBackground(Beacon... beacons) {
         // Beacon... é um vetor de parâmetros do tipo Beacon.
 
-        String nome, major, minor, rssi, distance, urlBeacon;
-
-        nome = "";
-        major = "-1";
-        minor = "-1";
-        rssi = "0d";
-        distance = "0.0";
+        String nome, major, minor, rssi, distance;
 
         Log.d(TAG, "Comunicando com o servidor.");
         Log.d(TAG, "Nº beacons:\t" + beacons.length);
@@ -65,7 +59,7 @@ public class AsyncTaskBeacon extends AsyncTask<Beacon, Void, List<Produto>> {
         } catch (UnsupportedEncodingException e) {
             Log.d(TAG, ":ERRO:" + e.getMessage());
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
-            return null;
+           return null;
         }
 
 
