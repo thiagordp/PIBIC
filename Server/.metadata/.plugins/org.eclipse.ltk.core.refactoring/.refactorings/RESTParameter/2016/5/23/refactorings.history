@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move &apos;pagina.html&apos; to &apos;WEB-INF&apos;" description="Move &apos;pagina.html&apos; to &apos;WEB-INF&apos;" destination="WebContent/WEB-INF" element1="/UserManagement/WebContent/pagina.html" flags="7" id="org.eclipse.ltk.core.refactoring.move.resources" resources="1" stamp="1464708436331" updateReferences="true"/>
+</session>

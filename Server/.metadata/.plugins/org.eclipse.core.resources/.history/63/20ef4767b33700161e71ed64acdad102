@@ -1,0 +1,22 @@
+/**
+ * 
+ */
+package model;
+
+import java.io.Serializable;
+
+import javax.persistence.Embeddable;
+
+/**
+ * @author Thiago Dal Pont
+ *
+ */
+@Embeddable
+public class ProdutoPK implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+}

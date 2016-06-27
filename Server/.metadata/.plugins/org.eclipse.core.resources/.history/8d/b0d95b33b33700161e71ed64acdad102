@@ -1,0 +1,15 @@
+/**
+ * 
+ */
+package model;
+
+import javax.persistence.Embeddable;
+
+/**
+ * @author Thiago Dal Pont
+ *
+ */
+@Embeddable
+public class ProdutoPK {
+
+}

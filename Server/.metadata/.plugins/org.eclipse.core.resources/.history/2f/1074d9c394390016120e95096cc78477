@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+
+	<display-name>rest-exemplo</display-name>
+	<servlet>
+		<servlet-name>Exemplo REST</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>control</param-value> <!-- Pacote da classe -->
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Exemplo Rest</servlet-name>
+		<url-pattern>/exemplo/*</url-pattern>
+	</servlet-mapping>
+</web-app>

@@ -1,0 +1,23 @@
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
+/**
+ * 
+ */
+
+/**
+ * @author Thiago Dal Pont
+ *
+ */
+
+public class Servidor {
+
+	@GET
+	@Path("soma/{num1}/{num2}")
+	@Produces("text/plain")
+	public String soma(@PathParam("num1") int num1, @PathParam("num2") int num2) {
+		return String.valueOf(num1 + num2);
+	}
+}

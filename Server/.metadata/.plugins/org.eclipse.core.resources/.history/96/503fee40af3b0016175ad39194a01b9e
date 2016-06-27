@@ -1,0 +1,98 @@
+/**
+ * 
+ */
+package control;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
+import model.Produto;
+import model.Rest;
+
+/**
+ * @author Thiago Dal Pont
+ *
+ */
+@Path("/servidor")
+public class Servidor {
+
+	@GET
+	@Path("/{idUsuario}/{mac}/{major}/{minor}/{potencia}")
+	@Produces("text/plain")
+	public String getData(@PathParam("idUsuario") int idUsuario, @PathParam("mac") String mac,
+			@PathParam("major") int major, @PathParam("minor") int minor, @PathParam("potencia") float potencia) {
+
+		String resposta = "";
+
+		try {
+			Timestamp timestamp = new Timestamp(new Date().getTime());
+			// url = idUsuario + "\t" + uuid + "\t" + major + "\t" + minor +
+			// "\t" + potencia + "\t" + timestamp;
+
+			Rest rest = new Rest(idUsuario, mac, major, minor, potencia, timestamp);
+
+			ModelController modelCtr = new ModelController();
+			modelCtr.insert(rest);
+
+		} catch (Exception e) {
+			resposta = e.getMessage() + "\t" + e.getCause();
+		}
+
+		resposta = consulta(mac);
+
+		return resposta;
+	}
+
+	private String consulta(String mac) {
+
+		String sql = "SELECT id_produto, nome_produto, id_mac from produto" + " WHERE id_mac = '" + mac + "';";
+
+		Random random = new Random();
+
+		List<Object> query = new ModelController().query(sql);
+
+		List<Object> listaProduto = new ArrayList<>();
+
+		System.out.println(query.size());
+		for (int i = 0; i < query.size(); i += Math.abs(random.nextInt(query.size() - i)) + 1) {
+			listaProduto.add(query.get(i));
+		}
+
+		String retorno = toJson(listaProduto);
+		System.out.println(retorno);
+
+		return retorno;
+	}
+
+	private String toJson(List<Object> produtos) {
+		String json = "{";
+
+		for (int i = 0; i < produtos.size(); i++) {
+			Object[] obj = (Object[]) produtos.get(i);
+
+			for (int j = 0; j < obj.length; j++) {
+				json += "\"" + obj[j] + "\"";
+
+				if (j < obj.length - 1) {
+					json += ":";
+				}
+			}
+
+			if (i < produtos.size() - 1) {
+				json += ",";
+			}
+		}
+
+		json += "}";
+
+		return json;
+	}
+}

@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package model;
+
+import javax.persistence.Column;
+
+import org.hibernate.annotations.Entity;
+import org.hibernate.annotations.Table;
+
+/**
+ * @author Thiago Dal Pont
+ *
+ */
+@Entity
+@Table(name = "produto")
+public class Produto {
+	@Column(name ="id_mac", nullable = false)
+}

@@ -1,0 +1,20 @@
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
+/**
+ * 
+ */
+
+/**
+ * @author Thiago Dal Pont
+ *
+ */
+@Path("/servidor")
+public class Servidor {
+
+	@GET
+	@Path("/{num1}/{num2}")
+	public String soma(@PathParam("num1") int num1, @PathParam("num2") int num2){
+		
+	}
+}

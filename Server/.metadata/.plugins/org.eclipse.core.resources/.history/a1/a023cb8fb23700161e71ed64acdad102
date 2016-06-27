@@ -1,0 +1,14 @@
+/**
+ * 
+ */
+package model;
+
+import javax.persistence.Column;
+
+/**
+ * @author Thiago Dal Pont
+ *
+ */
+public class Produto {
+	@Column(name ="id_mac", nullable = false)
+}

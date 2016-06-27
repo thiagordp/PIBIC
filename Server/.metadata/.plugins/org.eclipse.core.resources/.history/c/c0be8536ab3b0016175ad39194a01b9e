@@ -1,0 +1,49 @@
+package control;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+/**
+ * 
+ */
+
+/**
+ * @author Thiago Dal Pont
+ *
+ */
+@Path("/")
+public class Servidor {
+
+	// URL: http://localhost:8080/rest-exemplo/exemplo/soma1/1/2
+	
+	@GET
+	@Path("soma1/{num1}/{num2}")
+	@Produces("text/plain")
+	public String soma(@PathParam("num1") String num1, @PathParam("num2") String num2) {
+		try {
+			int n1 = Integer.valueOf(num1) + Integer.valueOf(num2);
+			return String.valueOf(n1);
+		} catch (Exception e) {
+			String error = "Invalid numbers!";
+			return error;
+		}
+	}
+	
+	// URL: http://localhost:8080/rest-exemplo/exemplo/soma2?n1=10.2&n290.3
+
+	@GET
+	@Path("soma2")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String getQueryParam(@QueryParam("n1") String num1, @QueryParam("n2") String num2) {
+
+		Double n1 = Double.parseDouble(num1);
+		Double n2 = Double.parseDouble(num2);
+		Double n3 = n1 + n2;
+
+		return n3.toString();
+	}
+}

@@ -1,0 +1,14 @@
+import javax.ws.rs.Path;
+
+/**
+ * 
+ */
+
+/**
+ * @author Thiago Dal Pont
+ *
+ */
+@Path("/servidor")
+public class Servidor {
+
+}
