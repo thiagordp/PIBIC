@@ -64,11 +64,6 @@ public class Servidor {
 
 		System.out.println(query.size());
 
-		System.out.println(Arrays.toString(query.toArray()));
-		for (int i = 0; i < query.size(); i++) {
-			// System.out.println(Arrays.deepToString(query.get(i)));
-		}
-
 		for (int i = 0; i < query.size(); i += Math.abs(random.nextInt(query.size() - i)) + 1) {
 			listaProduto.add(query.get(i));
 		}
