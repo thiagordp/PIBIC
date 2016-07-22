@@ -2,20 +2,28 @@
 <!DOCTYPE hibernate-configuration PUBLIC
 "-//Hibernate/Hibernate Configuration DTD//EN"
 "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
-
+<!-- <hibernate-configuration> <session-factory> <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property> 
+	<property name="hibernate.connection.password">sql123</property> <property 
+	name="hibernate.connection.url">jdbc:mysql://localhost:3306/pibic</property> 
+	<property name="hibernate.connection.username">root</property> <property 
+	name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property> <property 
+	name="hibernate.show_sql">true</property> <property name="hibernate.format_sql">true</property> 
+	<property name="hibernate.current_session_context_class">thread</property> 
+	<property name="hibernate.connection.pool_size">10</property> <property name="hibernate.hbm2ddl.auto">update</property> 
+	<mapping class="model.Rest" /> <mapping class="model.Produto" /> </session-factory> 
+	</hibernate-configuration> -->
 <hibernate-configuration>
 	<session-factory>
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="hibernate.connection.password">sql123</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/pibic</property>
-		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">#master045%</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost/cleberso_recsys</property>
+		<property name="hibernate.connection.username">cleberso_recsys</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="hibernate.show_sql">true</property>
 		<property name="hibernate.format_sql">true</property>
-		<property name="hbm2ddl.auto">update</property>
-		<property name="hibernate.current_session_context_class">thread</property> <!-- Gerenciado pelo JBoss -->
+		<property name="hibernate.current_session_context_class">thread</property>
 		<property name="hibernate.connection.pool_size">10</property>
-
+		<property name="hibernate.hbm2ddl.auto">update</property>
 		<mapping class="model.Rest" />
 		<mapping class="model.Produto" />
 	</session-factory>

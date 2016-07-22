@@ -5,7 +5,6 @@ package control;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -15,7 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import model.Produto;
 import model.Rest;
 
 /**
@@ -24,7 +22,15 @@ import model.Rest;
  */
 @Path("/servidor")
 public class Servidor {
+	private ModelController modelCtr = null;
 
+	public Servidor() {
+		modelCtr = new ModelController();
+	}
+
+	/**
+	 * Requisição do usuário.
+	 */
 	@GET
 	@Path("/{idUsuario}/{mac}/{major}/{minor}/{potencia}")
 	@Produces("text/plain")
@@ -35,65 +41,79 @@ public class Servidor {
 
 		try {
 			Timestamp timestamp = new Timestamp(new Date().getTime());
-			// url = idUsuario + "\t" + uuid + "\t" + major + "\t" + minor +
-			// "\t" + potencia + "\t" + timestamp;
-
 			Rest rest = new Rest(idUsuario, mac, major, minor, potencia, timestamp);
 
-			ModelController modelCtr = new ModelController();
 			modelCtr.insert(rest);
+			resposta = consulta(mac);
 
 		} catch (Exception e) {
 			resposta = e.getMessage() + "\t" + e.getCause();
+		} finally {
+			if (modelCtr != null) {
+				modelCtr.close();
+			}
 		}
-
-		resposta = consulta(mac);
 
 		return resposta;
 	}
 
+	/**
+	 * Consulta no banco, ao MAC indicado.
+	 */
 	private String consulta(String mac) {
 
-		String sql = "SELECT id_produto, nome_produto, id_mac from produto" + " WHERE id_mac = '" + mac + "';";
+		String sql = "SELECT id_produto, nome_produto, id_mac from produto WHERE id_mac = '" + mac + "';";
 
-		Random random = new Random();
+		String retorno = "";
 
-		List<Object> query = new ModelController().query(sql);
+		try {
+			Random random = new Random();
 
-		List<Object> listaProduto = new ArrayList<>();
+			List<Object> query = modelCtr.query(sql);
+			List<Object> listaProduto = new ArrayList<>();
 
-		System.out.println(query.size());
+			if (query.size() > 0) {
+				for (int i = Math.abs(random.nextInt(query.size())); i < query
+						.size(); i += Math.abs(random.nextInt(query.size() - i)) + 1) {
+					listaProduto.add(query.get(i));
+				}
 
-		for (int i = 0; i < query.size(); i += Math.abs(random.nextInt(query.size() - i)) + 1) {
-			listaProduto.add(query.get(i));
+				retorno = toJson(listaProduto);
+			} else {
+				retorno = "{}";
+			}
+		} catch (Exception e) {
+			retorno = e.getMessage();
 		}
-
-		String retorno = toJson(listaProduto);
-		System.out.println(retorno);
 
 		return retorno;
 	}
 
+	/**
+	 * Converte o array de objetos para uma string JSON
+	 */
 	private String toJson(List<Object> produtos) {
+
 		String json = "{";
+		if (produtos != null) {
+			for (int i = 0; i < produtos.size(); i++) {
+				Object[] obj = (Object[]) produtos.get(i);
 
-		for (int i = 0; i < produtos.size(); i++) {
-			Object[] obj = (Object[]) produtos.get(i);
+				for (int j = 0; j < 2; j++) {
+					json += "\"" + obj[j] + "\"";
 
-			for (int j = 0; j < obj.length; j++) {
-				json += "\"" + obj[j] + "\"";
+					if (j == 0) {
+						json += ":";
+					}
+				}
 
-				if (j < obj.length - 1) {
-					json += ":";
+				if (i < produtos.size() - 1) {
+					json += ",";
 				}
 			}
 
-			if (i < produtos.size() - 1) {
-				json += ",";
-			}
+			json += "}";
 		}
-
-		json += "}";
 
 		return json;
 	}
