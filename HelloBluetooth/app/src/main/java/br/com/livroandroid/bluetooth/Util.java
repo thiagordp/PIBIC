@@ -86,6 +86,7 @@ public class Util {
         List<Produto> produtoList = new ArrayList<>();
 
         try {
+            Log.d("JSON", "Iniciando");
             JSONObject jsonObject = new JSONObject(json);
 
             Iterator<String> iterator = jsonObject.keys();
@@ -94,7 +95,9 @@ public class Util {
 
                 Produto produto = new Produto();
                 String id = iterator.next();
+                Log.d("JSON", id);
                 String descricao = jsonObject.optString(id);
+                Log.d("JSON", descricao);
 
                 produto.setId(Integer.valueOf(id));
                 produto.setDescricao(descricao);

@@ -1,14 +1,19 @@
 package br.com.livroandroid.bluetooth;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.io.File;
 
 /**
  * Exemplo de bluetooth
@@ -59,7 +64,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     break;
                 case Util.OPT_CONFIG:
                     // Inserção de imagens
-/*
+
 
                     File file = Environment.getExternalStorageDirectory();
 
@@ -69,13 +74,13 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     BancoController controller = new BancoController(getBaseContext());
                     controller.insereImagem(path);
 
-                  /*  Bitmap bitmap = Util.getPhoto(controller.selectImagem(7));
+                    Bitmap bitmap = Util.getPhoto(controller.selectImagem(7));
 
                     ImageView imageView = (ImageView) findViewById(R.id.imageView);
 
-                    imageView.setImageBitmap(bitmap);*/
+                    imageView.setImageBitmap(bitmap);
 
-                    startActivity(new Intent(this, ConfiguracaoActivity.class));
+                    //  startActivity(new Intent(this, ConfiguracaoActivity.class));
 
 
                     break;

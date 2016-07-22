@@ -24,7 +24,7 @@ public class CriaBanco extends SQLiteOpenHelper {
 
         super(context, NOME_BANCO, null, VERSAO); // parâmetro null aciona o Cursor padrão do sqlite;
 
-        Log.d(TAG, "Created");
+        Log.d(TAG, "Aberto");
     }
 
     @Override
