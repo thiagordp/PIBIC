@@ -64,35 +64,20 @@ public class AsyncTaskBeacon extends AsyncTask<Beacon, Void, List<Produto>> {
             return null;
         }
 
-
         StringBuilder stringBuilder = new StringBuilder();
 
-        Log.d(TAG, "BEFORE");
         String path = Util.getConfigPathData();
         stringBuilder.append(path);
-        /*stringBuilder.append("device=" + nome);
-        stringBuilder.append("&major=" + major);
-        stringBuilder.append("&minor=" + minor);
-        stringBuilder.append("&distance=" + distance);
-        stringBuilder.append("&signal=" + rssi + "d");
-        stringBuilder.append("&option=beacon");*/
         Random random = new Random();
 
         stringBuilder.append("/" + Math.abs(random.nextInt() % 50));
-        //stringBuilder.append("/" + nome);
-        stringBuilder.append("/" + mac);
-        stringBuilder.append("/" + major);
-        stringBuilder.append("/" + minor);
-        stringBuilder.append("/" + rssi);
-
-        Log.d(TAG, stringBuilder.toString());
-        Log.d(TAG, "AFTER");
 
         try {
             URL url = new URL(stringBuilder.toString());
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+
                 String response = Util.convertStreamToString(urlConnection.getInputStream());
                 List<Produto> produtoJSON = Util.parserJason(response);
                 System.out.println(produtoJSON + "\t" + produtoJSON.size());
@@ -108,7 +93,6 @@ public class AsyncTaskBeacon extends AsyncTask<Beacon, Void, List<Produto>> {
                     // Se a imagem existe no banco.
                     if (image != null) {
                         Bitmap bitmap = Util.getPhoto(image);   // Converte o array de bytes em imagem bitmap.
-                        Log.d(TAG, "DEBUG5");
                         produto.setImagem(bitmap);
 
                         produtoBanco.add(produto);
@@ -129,14 +113,18 @@ public class AsyncTaskBeacon extends AsyncTask<Beacon, Void, List<Produto>> {
         return null;
     }
 
+    /*stringBuilder.append("device=" + nome);
+    stringBuilder.append("&major=" + major);
+    stringBuilder.append("&minor=" + minor);
+    stringBuilder.append("&distance=" + distance);
+    stringBuilder.append("&signal=" + rssi + "d");
+    stringBuilder.append("&option=beacon");*/
+    //stringBuilder.append("/" + nome);
+
     protected void onPostExecute(List<Produto> produtos) {
         final TableLayout tableLayout = (TableLayout) view.findViewById(R.id.tabela);
 
-        Log.d(TAG, "IMG_FINAL\t" + String.valueOf(produtos.size()));
-
         for (final Produto produto : produtos) {
-
-
             TableRow tableRow = new TableRow(context);
 
             tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT));

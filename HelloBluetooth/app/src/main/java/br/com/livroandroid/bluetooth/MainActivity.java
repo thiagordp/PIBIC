@@ -1,7 +1,6 @@
 package br.com.livroandroid.bluetooth;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
@@ -9,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,7 +30,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
         setContentView(R.layout.activity_main);
 
-        String[] items = new String[] {
+        String[] items = new String[]{
                 "Verificar e ativar Bluetooth",
                 "Buscar devices",
                 "Recomendação",
@@ -42,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
 
         // Atribuição dos itens ao List View
         ListView listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items));
+        listView.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item, items));
         listView.setOnItemClickListener(this);
     }
 
@@ -61,9 +59,6 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     break;
                 case Util.OPT_SELECT_IMG:
                     Toast.makeText(getBaseContext(), "Selecionar imagens", Toast.LENGTH_LONG).show();
-                    break;
-                case Util.OPT_CONFIG:
-                    // Inserção de imagens
 
 
                     File file = Environment.getExternalStorageDirectory();
@@ -74,15 +69,10 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
                     BancoController controller = new BancoController(getBaseContext());
                     controller.insereImagem(path);
 
-                    Bitmap bitmap = Util.getPhoto(controller.selectImagem(7));
+                    break;
 
-                    ImageView imageView = (ImageView) findViewById(R.id.imageView);
-
-                    imageView.setImageBitmap(bitmap);
-
-                    //  startActivity(new Intent(this, ConfiguracaoActivity.class));
-
-
+                case Util.OPT_CONFIG:
+                    startActivity(new Intent(this, ConfiguracaoActivity.class));
                     break;
                 default:
                     finish();
@@ -93,11 +83,17 @@ public class MainActivity extends ActionBarActivity implements AdapterView.OnIte
         }
     }
 
-
     public void LOG(String tag, String msg) {
         if (Util.LOG_ENABLED) {
             Log.d(tag, msg);
         }
     }
+
+    /* BUSCA de IMG no banco
+    Bitmap bitmap = Util.getPhoto(controller.selectImagem(7));
+
+    ImageView imageView = (ImageView) findViewById(R.id.imageView);
+    imageView.setImageBitmap(bitmap);
+    * */
 
 }

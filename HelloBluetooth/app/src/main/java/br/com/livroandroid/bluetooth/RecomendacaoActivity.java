@@ -43,12 +43,14 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
         // Verificar se há bluetooth e internet //
 
         // Configuração do detector de beacons.
-        beaconManager = BeaconManager.getInstanceForApplication(this);
+        beaconManager = BeaconManager.getInstanceForApplication(this); // beaconManeger é do tipo BeaconManager.
         beaconManager.setBackgroundMode(true);
         beaconManager.setBackgroundScanPeriod(1000l);
         beaconManager.setBackgroundBetweenScanPeriod(1l);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         beaconManager.bind(this);
+
+
         beaconEnviado = new ArrayList<>();
 
         LOG(TAG, "Configuração de beacon efetuada");
@@ -78,16 +80,13 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
             public void didDetermineStateForRegion(int i, Region region) {
             }
         });
-
         // É chamado uma vez por segundo.
         beaconManager.setRangeNotifier(new RangeNotifier() {
 
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
-
                 // Caso tenha mais de um beacon na região e o número em relação à última vez mudou.
                 if (collection.size() > 0) {
-
                     LOG(TAG, "Iniciando detecção de beacons: " + collection.size() + " beacon(s) encontrado(s).");
 
                     for (Beacon beacon : collection) {
@@ -99,12 +98,9 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
                 }
             }
         });
-
         try {
-
-            // Inicia o monitoramento
             LOG(TAG, "Iniciando monitoramento.");
-            beaconManager.startRangingBeaconsInRegion(new Region(REGION1, null, null, null));
+            beaconManager.startRangingBeaconsInRegion(new Region(REGION1, null, null, null));        // Inicia o monitoramento
             beaconManager.startMonitoringBeaconsInRegion(new Region(REGION1, null, null, null));
         } catch (RemoteException e) {
             LOG(TAG, e.getMessage());
@@ -125,7 +121,6 @@ public class RecomendacaoActivity extends ActionBarActivity implements BeaconCon
             Log.d(tag, msg);
         }
     }
-
 
     private void comunicaServidor(String name, int major, int minor, double rssi, double distance) throws Exception {
         String _nome, _major, _minor, _rssi, _distance, _url;

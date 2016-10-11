@@ -130,11 +130,8 @@ public class Util {
             FileInputStream fileInputStream = new FileInputStream(Util.CONFIG_PATH);
 
             byte[] dados = new byte[fileInputStream.available()];
-
             fileInputStream.read(dados, 0, dados.length);
-
             String string = new String(dados, 0, dados.length, "UTF-8");
-
             data = string.replaceAll("\\s+", "");
 
         } catch (IOException e) {

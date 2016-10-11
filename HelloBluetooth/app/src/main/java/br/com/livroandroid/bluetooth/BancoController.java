@@ -54,7 +54,6 @@ public class BancoController {
      * Seleciona a imagem correspondente ao ID fornecido
      */
     public byte[] selectImagem(int id) {
-        // String sql = "SELECT " + CriaBanco.ID + " WHERE " + CriaBanco.ID + " = " + id;
         Log.d(TAG, "Getting db");
         db = criaBanco.getWritableDatabase();
         Log.d(TAG, "DB gotted");
@@ -77,6 +76,20 @@ public class BancoController {
     public void closeDB() {
         this.db.close();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /*
     public Cursor carregaDados() {
