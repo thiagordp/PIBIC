@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.MatrixParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -20,7 +19,6 @@ import javax.ws.rs.QueryParam;
 import org.bson.Document;
 
 import model.Usuario;
-import oracle.sql.DATE;
 
 /**
  * @author Thiago Dal Pont
@@ -45,7 +43,7 @@ public class Servidor {
 	return st;
     }
 
-    // http://localhost:8080/PIBIC_BaseDeDados/baserec/mongo?user=1&tipo=1&major=10&minor=3&rssi=-3.0
+    // http://localhost:8080/PIBIC_BaseDeDados/baserec/mongo?user=1&tipo=2
     @GET
     @Path("/mongo/")
     public String novainteracao(@QueryParam("user") Integer user_id, @QueryParam("tipo") Integer tipo, @QueryParam("mac") String mac,
@@ -71,7 +69,7 @@ public class Servidor {
 
 		break;
 	    case Mongo.TAG_NFC:
-		registro.append("tipo", Mongo.BEACON);
+		registro.append("tipo", Mongo.TAG_NFC);
 		break;
 	    }
 
@@ -145,7 +143,7 @@ public class Servidor {
 		matchs[j] = Integer.valueOf(list.get(index).toString());
 
 		System.out.println("Match j: " + matchs[j] + "\tCos: " + listaAngulos.get(j));
-		;
+
 		listaAngulos.set(index, -1.0);
 	    }
 
